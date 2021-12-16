@@ -1,22 +1,17 @@
 #pragma once
 
+#define PRINTER(printer, ...)\
+	if(__printerf == printer) {\
+		ret = printer(__VA_ARGS__);\
+	} else
+
 #define print_macro(...) ({\
 	int ret = 0;\
-	if(__printerf == printf) {\
-		ret = printf(__VA_ARGS__);\
-	} else\
-	if(__printerf == fprintf) {\
-		ret = fprintf(__stream, __VA_ARGS__);\
-	} else\
-	if(__printerf == dprintf) {\
-		ret = dprintf(__fd, __VA_ARGS__);\
-	} else\
-	if(__printerf == sprintf) {\
-		ret = sprintf(__str, __VA_ARGS__);\
-	} else\
-	if(__printerf == snprintf) {\
-		ret = snprintf(__str, __size,  __VA_ARGS__);\
-	} else\
+	PRINTER(printf, __VA_ARGS__)\
+	PRINTER(fprintf, __stream, __VA_ARGS__)\
+	PRINTER(dprintf, __fd, __VA_ARGS__)\
+	PRINTER(sprintf, __str, __VA_ARGS__)\
+	PRINTER(snprintf, __str, __size, __VA_ARGS__)\
 	{ ret = -1;}\
 	ret;\
 })
