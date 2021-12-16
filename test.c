@@ -34,5 +34,12 @@ int main(void)
 
 	sprintln(string, "The first characters of a string, printted to a string.");
 	print(string);
+
+	snprint(string, 21, "The first characters of a string, printted to a string.");
+	println(string);
+
+	snprintln(string, 21, "123", "456");
+	print(string);
+
 	return 0;
 }

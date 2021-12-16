@@ -14,12 +14,15 @@
 	if(__printerf == sprintf) {\
 		ret = sprintf(__str, __VA_ARGS__);\
 	} else\
+	if(__printerf == snprintf) {\
+		ret = snprintf(__str, __size,  __VA_ARGS__);\
+	} else\
 	{ ret = -1;}\
 	ret;\
 })
 
 #define REGISTER_PRINT_TYPE(type, code)\
-int tgprint(FILE *__stream, int __fd, char *__str, void *__printerf, type exp) __attribute__((overloadable)) code
+int tgprint(FILE *__stream, int __fd, char *__str, size_t __size, void *__printerf, type exp) __attribute__((overloadable)) code
 
 REGISTER_PRINT_TYPE(char *, {return print_macro("%s", exp);})
 REGISTER_PRINT_TYPE(void *, {return print_macro("%p", exp);})
@@ -71,8 +74,9 @@ REGISTER_PRINT_TYPE(int, {return print_macro("%d", exp);})
 #define MIDDLE(X)\
 	if(last_ret >= 0) {\
 		ret += last_ret;\
-		last_ret = tgprint(__stream, __fd, __str, __printerf, X);\
+		last_ret = tgprint(__stream, __fd, __str, __size, __printerf, X);\
 		__str += last_ret;\
+		__size -= last_ret;\
 	}
 
 #define GENERATE_OUTPUT(...)\
@@ -87,6 +91,7 @@ REGISTER_PRINT_TYPE(int, {return print_macro("%d", exp);})
 	FILE *__stream = NULL;\
 	int __fd = 0;\
 	char *__str = NULL;\
+	size_t __size = 0;\
 	void *__printerf;\
 	__printerf = (void*)printf;\
 	GENERATE_OUTPUT(__VA_ARGS__)\
@@ -96,6 +101,7 @@ REGISTER_PRINT_TYPE(int, {return print_macro("%d", exp);})
 	FILE *__stream = _stream;\
 	int __fd = 0;\
 	char *__str = NULL;\
+	size_t __size = 0;\
 	void *__printerf;\
 	__printerf = (void*)fprintf;\
 	GENERATE_OUTPUT(__VA_ARGS__)\
@@ -105,6 +111,7 @@ REGISTER_PRINT_TYPE(int, {return print_macro("%d", exp);})
 	FILE *__stream = NULL;\
 	int __fd = _fd;\
 	char *__str = NULL;\
+	size_t __size = 0;\
 	void *__printerf;\
 	__printerf = (void*)dprintf;\
 	GENERATE_OUTPUT(__VA_ARGS__)\
@@ -114,8 +121,19 @@ REGISTER_PRINT_TYPE(int, {return print_macro("%d", exp);})
 	FILE *__stream = NULL;\
 	int __fd = 0;\
 	char *__str = _str;\
+	size_t __size = 0;\
 	void *__printerf;\
 	__printerf = (void*)sprintf;\
+	GENERATE_OUTPUT(__VA_ARGS__)\
+})
+
+#define snprint(_str, _size, ...) ({\
+	FILE *__stream = NULL;\
+	int __fd = 0;\
+	char *__str = _str;\
+	size_t __size = _size;\
+	void *__printerf;\
+	__printerf = (void*)snprintf;\
 	GENERATE_OUTPUT(__VA_ARGS__)\
 })
 
@@ -123,3 +141,4 @@ REGISTER_PRINT_TYPE(int, {return print_macro("%d", exp);})
 #define fprintln(...) fprint(__VA_ARGS__, "\n")
 #define dprintln(...) dprint(__VA_ARGS__, "\n")
 #define sprintln(...) sprint(__VA_ARGS__, "\n")
+#define snprintln(...) snprint(__VA_ARGS__, "\n")
