@@ -19,10 +19,6 @@
 #define REGISTER_PRINT_TYPE(type, code)\
 int tgprint(FILE *__stream, int __fd, char *__str, size_t __size, void *__printerf, type exp) __attribute__((overloadable)) code
 
-REGISTER_PRINT_TYPE(char *, {return print_macro("%s", exp);})
-REGISTER_PRINT_TYPE(void *, {return print_macro("%p", exp);})
-REGISTER_PRINT_TYPE(int, {return print_macro("%d", exp);})
-
 //FOR_EACH magic taken from https://stackoverflow.com/questions/1872220/is-it-possible-to-iterate-over-arguments-in-variadic-macros
 
 #define STRINGIZE(arg)  STRINGIZE1(arg)
@@ -99,3 +95,7 @@ REGISTER_PRINT_TYPE(int, {return print_macro("%d", exp);})
 #define dprintln(...) dprint(__VA_ARGS__, "\n")
 #define sprintln(...) sprint(__VA_ARGS__, "\n")
 #define snprintln(...) snprint(__VA_ARGS__, "\n")
+
+REGISTER_PRINT_TYPE(char *, {return print_macro("%s", exp);})
+REGISTER_PRINT_TYPE(void *, {return print_macro("%p", exp);})
+REGISTER_PRINT_TYPE(int, {return print_macro("%d", exp);})
