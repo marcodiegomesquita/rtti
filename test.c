@@ -10,6 +10,15 @@ struct coords_t {
 
 REGISTER_TYPE(struct coords_t)
 
+REGISTER_PRINT_TYPE(struct coords_t, {\
+	return 	print_macro("(") + \
+		print_macro("%d", exp.x) +\
+		print_macro(", ") +\
+		print_macro("%d", exp.y) +\
+		print_macro(")");\
+})
+
+
 int main(void)
 {
 	int var = 42;
@@ -51,5 +60,6 @@ int main(void)
 
 	println("Let's apply a better format: ", FORMAT("%.2f", div));
 
+	println("And now, for a user-defined data type: ", coords);
 	return 0;
 }
