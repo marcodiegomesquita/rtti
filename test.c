@@ -29,6 +29,7 @@ int main(void)
 	println("Previous line has ", var, " characters.");
 
 	fprintln(stdout, "And this one is sent to stdout.");
+	dprintln(fileno(stdout), "And this one too!");
 
 	return 0;
 }

@@ -8,12 +8,15 @@
 	if(__printerf == fprintf) {\
 		ret = fprintf(__stream, __VA_ARGS__);\
 	} else\
+	if(__printerf == dprintf) {\
+		ret = dprintf(__fd, __VA_ARGS__);\
+	} else\
 	{ ret = -1;}\
 	ret;\
 })
 
 #define REGISTER_PRINT_TYPE(type, code)\
-int tgprint(FILE *__stream, void *__printerf, type exp) __attribute__((overloadable)) code
+int tgprint(FILE *__stream, int __fd, void *__printerf, type exp) __attribute__((overloadable)) code
 
 REGISTER_PRINT_TYPE(char *, {return print_macro("%s", exp);})
 REGISTER_PRINT_TYPE(void *, {return print_macro("%p", exp);})
@@ -65,7 +68,7 @@ REGISTER_PRINT_TYPE(int, {return print_macro("%d", exp);})
 #define MIDDLE(X)\
 	if(last_ret >= 0) {\
 		ret += last_ret;\
-		last_ret = tgprint(__stream, __printerf, X);\
+		last_ret = tgprint(__stream, __fd, __printerf, X);\
 	}
 
 #define GENERATE_OUTPUT(...)\
@@ -78,6 +81,7 @@ REGISTER_PRINT_TYPE(int, {return print_macro("%d", exp);})
 
 #define print(...) ({\
 	FILE *__stream = NULL;\
+	int __fd = 0;\
 	void *__printerf;\
 	__printerf = (void*)printf;\
 	GENERATE_OUTPUT(__VA_ARGS__)\
@@ -85,10 +89,20 @@ REGISTER_PRINT_TYPE(int, {return print_macro("%d", exp);})
 
 #define fprint(_stream, ...) ({\
 	FILE *__stream = _stream;\
+	int __fd = 0;\
 	void *__printerf;\
 	__printerf = (void*)fprintf;\
 	GENERATE_OUTPUT(__VA_ARGS__)\
 })
 
+#define dprint(_fd, ...) ({\
+	FILE *__stream = NULL;\
+	int __fd = _fd;\
+	void *__printerf;\
+	__printerf = (void*)dprintf;\
+	GENERATE_OUTPUT(__VA_ARGS__)\
+})
+
 #define println(...) print(__VA_ARGS__, "\n")
 #define fprintln(...) fprint(__VA_ARGS__, "\n")
+#define dprintln(...) dprint(__VA_ARGS__, "\n")
