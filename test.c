@@ -28,5 +28,7 @@ int main(void)
 	var = println("1234");
 	println("Previous line has ", var, " characters.");
 
+	fprintln(stdout, "And this one is sent to stdout.");
+
 	return 0;
 }

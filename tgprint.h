@@ -1,11 +1,23 @@
 #pragma once
 
-#define REGISTER_PRINT_TYPE(type, code)\
-int tgprint(type exp) __attribute__((overloadable)) code
+#define print_macro(...) ({\
+	int ret = 0;\
+	if(__printerf == printf) {\
+		ret = printf(__VA_ARGS__);\
+	} else\
+	if(__printerf == fprintf) {\
+		ret = fprintf(__stream, __VA_ARGS__);\
+	} else\
+	{ ret = -1;}\
+	ret;\
+})
 
-REGISTER_PRINT_TYPE(char *, {return printf("%s", exp);})
-REGISTER_PRINT_TYPE(void *, {return printf("%p", exp);})
-REGISTER_PRINT_TYPE(int, {return printf("%d", exp);})
+#define REGISTER_PRINT_TYPE(type, code)\
+int tgprint(FILE *__stream, void *__printerf, type exp) __attribute__((overloadable)) code
+
+REGISTER_PRINT_TYPE(char *, {return print_macro("%s", exp);})
+REGISTER_PRINT_TYPE(void *, {return print_macro("%p", exp);})
+REGISTER_PRINT_TYPE(int, {return print_macro("%d", exp);})
 
 //FOR_EACH magic taken from https://stackoverflow.com/questions/1872220/is-it-possible-to-iterate-over-arguments-in-variadic-macros
 
@@ -53,16 +65,30 @@ REGISTER_PRINT_TYPE(int, {return printf("%d", exp);})
 #define MIDDLE(X)\
 	if(last_ret >= 0) {\
 		ret += last_ret;\
-		last_ret = tgprint(X);\
+		last_ret = tgprint(__stream, __printerf, X);\
 	}
 
-#define print(...) ({\
+#define GENERATE_OUTPUT(...)\
 	int ret = 0, last_ret = 0;\
 	FOR_EACH(MIDDLE, "", __VA_ARGS__)\
 	if(last_ret >= 0)\
 		ret += last_ret;\
 	else ret = last_ret;\
-	ret;\
+	ret;
+
+#define print(...) ({\
+	FILE *__stream = NULL;\
+	void *__printerf;\
+	__printerf = (void*)printf;\
+	GENERATE_OUTPUT(__VA_ARGS__)\
+})
+
+#define fprint(_stream, ...) ({\
+	FILE *__stream = _stream;\
+	void *__printerf;\
+	__printerf = (void*)fprintf;\
+	GENERATE_OUTPUT(__VA_ARGS__)\
 })
 
 #define println(...) print(__VA_ARGS__, "\n")
+#define fprintln(...) fprint(__VA_ARGS__, "\n")
