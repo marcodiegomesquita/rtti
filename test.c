@@ -14,7 +14,7 @@ int main(void)
 {
 	int var = 42;
 	int array[3] = {0, 1, 2};
-	struct coords_t coords;
+	struct coords_t coords = {.x = 123, .y = 456};
 	char string[100];
 
 	println("Hello world!");
