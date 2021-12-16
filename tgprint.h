@@ -74,14 +74,6 @@ REGISTER_PRINT_TYPE(int, {return print_macro("%d", exp);})
 		__size -= last_ret;\
 	}
 
-#define GENERATE_OUTPUT(...)\
-	int ret = 0, last_ret = 0;\
-	FOR_EACH(MIDDLE, "", __VA_ARGS__)\
-	if(last_ret >= 0)\
-		ret += last_ret;\
-	else ret = last_ret;\
-	ret;
-
 #define BODY(stream, fd, str, size, function, ...) ({\
 	FILE *__stream = stream;\
 	int __fd = fd;\
@@ -89,7 +81,12 @@ REGISTER_PRINT_TYPE(int, {return print_macro("%d", exp);})
 	size_t __size = size;\
 	void *__printerf;\
 	__printerf = (void*)function;\
-	GENERATE_OUTPUT(__VA_ARGS__)\
+	int ret = 0, last_ret = 0;\
+	FOR_EACH(MIDDLE, "", __VA_ARGS__)\
+	if(last_ret >= 0)\
+		ret += last_ret;\
+	else ret = last_ret;\
+	ret;\
 })
 
 #define print(...) 			BODY(NULL, 0, NULL, 0, printf, __VA_ARGS__)
