@@ -17,7 +17,7 @@
 })
 
 #define REGISTER_PRINT_TYPE(type, code)\
-int tgprint(FILE *__stream, int __fd, char *__str, size_t __size, void *__printerf, type exp) __attribute__((overloadable)) code
+int tgprint(__attribute__((unused))char *__format, FILE *__stream, int __fd, char *__str, size_t __size, void *__printerf, type exp) __attribute__((overloadable)) code
 
 //FOR_EACH magic taken from https://stackoverflow.com/questions/1872220/is-it-possible-to-iterate-over-arguments-in-variadic-macros
 
@@ -65,12 +65,13 @@ int tgprint(FILE *__stream, int __fd, char *__str, size_t __size, void *__printe
 #define MIDDLE(X)\
 	if(last_ret >= 0) {\
 		ret += last_ret;\
-		last_ret = tgprint(__stream, __fd, __str, __size, __printerf, X);\
+		last_ret = tgprint(__format, __stream, __fd, __str, __size, __printerf, X);\
 		__str += last_ret;\
 		__size -= last_ret;\
 	}
 
 #define BODY(stream, fd, str, size, function, ...) ({\
+	char *__format = NULL;\
 	FILE *__stream = stream;\
 	int __fd = fd;\
 	char *__str = str;\
@@ -98,4 +99,6 @@ int tgprint(FILE *__stream, int __fd, char *__str, size_t __size, void *__printe
 
 REGISTER_PRINT_TYPE(char *, {return print_macro("%s", exp);})
 REGISTER_PRINT_TYPE(void *, {return print_macro("%p", exp);})
-REGISTER_PRINT_TYPE(int, {return print_macro("%d", exp);})
+REGISTER_PRINT_TYPE(int, {return print_macro(__format ? __format : "%d", exp);})
+
+#define FORMAT(_format, exp) ({__format = _format; "";}), exp, ({__format = NULL; "";}, "")

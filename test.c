@@ -41,5 +41,8 @@ int main(void)
 	snprintln(string, 21, "123", "456");
 	print(string);
 
+	println(coords.x, " + ", coords.y, " = ", coords.x + coords.y);
+	println("sum: ", ({__format = "test %05d"; "";}), coords.x + coords.y, ({__format = NULL; "";}));
+
 	return 0;
 }
