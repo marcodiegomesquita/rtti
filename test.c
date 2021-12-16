@@ -25,5 +25,8 @@ int main(void)
 
 	println("Array: ", array);
 
+	var = println("1234");
+	println("Previous line has ", var, " characters.");
+
 	return 0;
 }

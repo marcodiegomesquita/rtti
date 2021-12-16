@@ -51,7 +51,7 @@ REGISTER_PRINT_TYPE(int, {return printf("%d", exp);})
 #define MIDDLE(X)\
 	if(last_ret >= 0) {\
 		ret += last_ret;\
-		last_ret += tgprint(X);\
+		last_ret = tgprint(X);\
 	}
 
 #define print(...) ({\
