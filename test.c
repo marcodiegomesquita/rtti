@@ -42,7 +42,14 @@ int main(void)
 	print(string);
 
 	println(coords.x, " + ", coords.y, " = ", coords.x + coords.y);
-	println("sum: ", ({__format = "test %05d"; "";}), coords.x + coords.y, ({__format = NULL; "";}));
+	println("sum: ", FORMAT("%05d", coords.x + coords.y));
+
+	println("How much is 1/3? ", 1/3);
+	println("What if we cast it to float? ", ((float)1.0/(float)3.0));
+
+	float div = 1.0/3.0;
+
+	println("Let's apply a better format: ", FORMAT("%.2f", div));
 
 	return 0;
 }

@@ -100,5 +100,6 @@ int tgprint(__attribute__((unused))char *__format, FILE *__stream, int __fd, cha
 REGISTER_PRINT_TYPE(char *, {return print_macro("%s", exp);})
 REGISTER_PRINT_TYPE(void *, {return print_macro("%p", exp);})
 REGISTER_PRINT_TYPE(int, {return print_macro(__format ? __format : "%d", exp);})
+REGISTER_PRINT_TYPE(float, {return print_macro(__format ? __format : "%f", exp);})
 
-#define FORMAT(_format, exp) ({__format = _format; "";}), exp, ({__format = NULL; "";}, "")
+#define FORMAT(_format, exp)  ({__format = _format; "";}), exp, ({__format = NULL; "";})
