@@ -1,7 +1,7 @@
 #pragma once
 
 #define REGISTER_TYPE(type) \
-char* type_name(type exp) __attribute__((overloadable)) {\
+char* type_name(__attribute__((unused)) type exp) __attribute__((overloadable)) {\
 	return #type;\
 }\
 
