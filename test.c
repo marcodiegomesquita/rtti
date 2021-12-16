@@ -32,10 +32,10 @@ int main(void)
 	fprintln(stdout, "And this one is sent to stdout.");
 	dprintln(fileno(stdout), "And this one too!");
 
-	sprintln(string, "The first characters of a string, printted to a string.");
+	sprintln(string, "The first characters of a string, printed to a string.");
 	print(string);
 
-	snprint(string, 21, "The first characters of a string, printted to a string.");
+	snprint(string, 21, "The first characters of a string, printed to a string.");
 	println(string);
 
 	snprintln(string, 21, "123", "456");
