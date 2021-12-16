@@ -87,53 +87,36 @@ REGISTER_PRINT_TYPE(int, {return print_macro("%d", exp);})
 	else ret = last_ret;\
 	ret;
 
-#define print(...) ({\
-	FILE *__stream = NULL;\
-	int __fd = 0;\
-	char *__str = NULL;\
-	size_t __size = 0;\
+#define HEAD(stream, fd, str, size, function)\
+	FILE *__stream = stream;\
+	int __fd = fd;\
+	char *__str = str;\
+	size_t __size = size;\
 	void *__printerf;\
-	__printerf = (void*)printf;\
+	__printerf = (void*)function;
+
+#define print(...) ({\
+	HEAD(NULL, 0, NULL, 0, printf)\
 	GENERATE_OUTPUT(__VA_ARGS__)\
 })
 
 #define fprint(_stream, ...) ({\
-	FILE *__stream = _stream;\
-	int __fd = 0;\
-	char *__str = NULL;\
-	size_t __size = 0;\
-	void *__printerf;\
-	__printerf = (void*)fprintf;\
+	HEAD(_stream, 0, NULL, 0, fprintf)\
 	GENERATE_OUTPUT(__VA_ARGS__)\
 })
 
 #define dprint(_fd, ...) ({\
-	FILE *__stream = NULL;\
-	int __fd = _fd;\
-	char *__str = NULL;\
-	size_t __size = 0;\
-	void *__printerf;\
-	__printerf = (void*)dprintf;\
+	HEAD(NULL, _fd, NULL, 0, dprintf)\
 	GENERATE_OUTPUT(__VA_ARGS__)\
 })
 
 #define sprint(_str, ...) ({\
-	FILE *__stream = NULL;\
-	int __fd = 0;\
-	char *__str = _str;\
-	size_t __size = 0;\
-	void *__printerf;\
-	__printerf = (void*)sprintf;\
+	HEAD(NULL, 0, _str, 0, sprintf)\
 	GENERATE_OUTPUT(__VA_ARGS__)\
 })
 
 #define snprint(_str, _size, ...) ({\
-	FILE *__stream = NULL;\
-	int __fd = 0;\
-	char *__str = _str;\
-	size_t __size = _size;\
-	void *__printerf;\
-	__printerf = (void*)snprintf;\
+	HEAD(NULL, 0, _str, _size, snprintf)\
 	GENERATE_OUTPUT(__VA_ARGS__)\
 })
 
