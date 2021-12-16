@@ -11,11 +11,7 @@ struct coords_t {
 REGISTER_TYPE(struct coords_t)
 
 REGISTER_PRINT_TYPE(struct coords_t, {\
-	return 	print_macro("(") + \
-		print_macro("%d", exp.x) +\
-		print_macro(", ") +\
-		print_macro("%d", exp.y) +\
-		print_macro(")");\
+	return print_macro("(%d, %d)", exp.x, exp.y);\
 })
 
 
