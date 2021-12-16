@@ -1,3 +1,5 @@
+#pragma once
+
 #define REGISTER_PRINT_TYPE(type, code)\
 int tgprint(type exp) __attribute__((overloadable)) code
 
