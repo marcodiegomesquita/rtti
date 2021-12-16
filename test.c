@@ -15,6 +15,7 @@ int main(void)
 	int var = 42;
 	int array[3] = {0, 1, 2};
 	struct coords_t coords;
+	char string[100];
 
 	println("Hello world!");
 	println(var);
@@ -31,5 +32,7 @@ int main(void)
 	fprintln(stdout, "And this one is sent to stdout.");
 	dprintln(fileno(stdout), "And this one too!");
 
+	sprintln(string, "The first characters of a string, printted to a string.");
+	print(string);
 	return 0;
 }
