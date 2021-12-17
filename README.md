@@ -8,20 +8,6 @@ The idea behind that `type_name`, which is actually an overloadable function, is
 
 With regard to the type-generic `print`, it currently supports just a few types but adding user-defined types is equally simple. The file _test.c_ should be enough to illustrate how to use it.
 
-## Why
-
-I'm not the first one to feel this need. Actually, I got some inspiration from another implementation: [generic-print](https://github.com/exebook/generic-print). Ages ago, I decided to learn **C**. Coming from **Pascal**, I did not find `printf` nowhere near as elegant compared to how I could use `write` in **Pascal**. As time passed, I learned to like **C** and understand how its low level idiosyncrasies influences its programming model. Nevertheless, I still missed the simplicity of a simple `print` which I could pass a list of variables and let it automatically display their values.
-
-Some progress happened when **C** included the `_Generic` keyword. Unfortunately, I could not find a way to use it to implement a type-generic `print` function which could allow the programmer to easily specify forms to print user-defined data-types. Once I heard about the `__attribute__((overloadable))` extension in *Clang* I tried to use it to finally implement a type-generic user extensible `print` function.
-
-The first part of the effort allowed me to implement a primitive form of *Run-Time Type Information* [(RTTI)](https://en.wikipedia.org/wiki/Run-time_type_information) in **C**. The `type_name` implementation on the file _rtti.h_ is the result of it. The other part of the effort is a bit more evolved and lives on the _tgprint.h_ file which implements the type-generic user extensible `print` function.
-
-## Requirements
-
-This implementation requires the `__attribute__((overloadable))` extension from *Clang*. AFAIK, *Clang* is the only compiler currently available implementing it. So, for now, it can only be compiled with *Clang*. On my machine I compile it as follows:
-
-> clang -Wall -Wextra test.c
-
 ## How
 
 It is interesting to know a bit about how to use and how it works. Without diving to deep into details, let's study a little about it.
@@ -85,6 +71,20 @@ int main(void)
 ```
 
 To specify printing format for numeric data-types, some utility macros are available. See the example _test.c_ for more details.
+
+## Why
+
+I'm not the first one to feel this need. Actually, I got some inspiration from another implementation: [generic-print](https://github.com/exebook/generic-print). Ages ago, I decided to learn **C**. Coming from **Pascal**, I did not find `printf` nowhere near as elegant compared to how I could use `write` in **Pascal**. As time passed, I learned to like **C** and understand how its low level idiosyncrasies influences its programming model. Nevertheless, I still missed the simplicity of a simple `print` which I could pass a list of variables and let it automatically display their values.
+
+Some progress happened when **C** included the `_Generic` keyword. Unfortunately, I could not find a way to use it to implement a type-generic `print` function which could allow the programmer to easily specify forms to print user-defined data-types. Once I heard about the `__attribute__((overloadable))` extension in *Clang* I tried to use it to finally implement a type-generic user extensible `print` function.
+
+The first part of the effort allowed me to implement a primitive form of *Run-Time Type Information* [(RTTI)](https://en.wikipedia.org/wiki/Run-time_type_information) in **C**. The `type_name` implementation on the file _rtti.h_ is the result of it. The other part of the effort is a bit more evolved and lives on the _tgprint.h_ file which implements the type-generic user extensible `print` function.
+
+## Requirements
+
+This implementation requires the `__attribute__((overloadable))` extension from *Clang*. AFAIK, *Clang* is the only compiler currently available implementing it. So, for now, it can only be compiled with *Clang*. On my machine I compile it as follows:
+
+> clang -Wall -Wextra test.c
 
 ### How does it compare to [generic-print](https://github.com/exebook/generic-print)
 
