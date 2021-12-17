@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <math.h>
 
 #include "rtti.h"
 #include "tgprint.h"
@@ -57,5 +58,10 @@ int main(void)
 	println("Let's apply a better format: ", FORMAT("%.2f", div));
 
 	println("And now, for a user-defined data type: ", coords);
+
+	println("Let's try a series of formatted values...");
+	println(FORMAT_BEGIN("%.2f"), (float)1.0, " ", (float)M_PI, " ", div, FORMAT_END);
+	println(FORMAT_BEGIN("%.2f"), (float)1.0, " ", (float)M_PI, " ", FORMAT_END, div);
+
 	return 0;
 }
